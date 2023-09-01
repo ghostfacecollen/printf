@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
+#include "main.h"
 
 /**
 *_printf function: A function that produces output according to format.
@@ -22,6 +24,8 @@ int _printf(const char *format, ...) {
             *Temporarily store the value
             */
             int temp = value;
+	    char *buff;
+	    int index;
             /*
             *initialize counter for digits in value
             */
@@ -47,12 +51,12 @@ int _printf(const char *format, ...) {
              /*
             *+1 for null terminator
             */
-            char *buff = (char *)malloc((digits + 1) * sizeof(char));
+            buff = (char *)malloc((digits + 1) * sizeof(char));
             if (buff == NULL) {
                 fprintf(stderr, "Memory allocation failed\n");
                 exit(1);
             }
-            int index = digits - 1;
+            index = digits - 1;
 
             while (temp != 0) {
                 buff[index] = (temp % 10) + '0';
@@ -62,9 +66,12 @@ int _printf(const char *format, ...) {
 	    /**
 	     * Null terminate string
 	     */
-	      buff[digits] = '\0'; // Null-terminate the string
-            for (int j = 0; j < digits; j++) {
-                _putchar(buff[j]); // Print each digit character
+	      buff[digits] = '\0'; 
+            for (j = 0; j < digits; j++) {
+		    /**
+		     * PRINT EACH DIGIT CHAR
+		     */
+		    _putchar(buff[j]);
             }
             /*
             *Skip 'd' after processing '%'
@@ -77,17 +84,25 @@ int _printf(const char *format, ...) {
         count++;
             i++;
         }
-         else if (format[i] == '%' && format[i + 1] == 's') {
+        
+	  else if (format[i] == '%' && format[i + 1] == 's')
+	  {
+
             char *str = va_arg(args, char*);
 
             while(*str!='\0')
             {
                count++;
                 _putchar(*str);
-                *str++;
+		
+		 str++;
+		
 
             }
-            i++; // Skip 'd' after processing '%'
+	    /**
+	     * skip 'd' after processing '%'
+	     */
+            i++;
         }
         else if (format[i] == '%' && format[i + 1] == '%') {
                 _putchar('%');
@@ -99,11 +114,11 @@ int _printf(const char *format, ...) {
 
          else {
             _putchar(format[i]);
-            count++; // Increment character count
+            count++;
         }
     }
 
     va_end(args);
 
-    return count;
+    return (count);
 }
